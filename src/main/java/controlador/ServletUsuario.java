@@ -43,43 +43,45 @@ import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Usuario usuarioRegistrado;
+        
 	
 
 	
-    public ServletUsuario() {
-        super();
-    }
+        public ServletUsuario() {
+            super();
+        }
 
 	
+        @Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-		String tipo = request.getParameter("accion");
-		
-		if(tipo.equals("lista"))
-			listarUsuarios(request, response);
-		else if (tipo.equals("grabar"))
-			registroGrabar(request,response);
-		else if (tipo.equals("eliminar"))
-			eliminarUsuario(request, response);
-		else if (tipo.equals("login"))
-			iniciarLogin(request, response);
-		else if (tipo.equals("cerrar"))
-			cerrarLogin(request, response);
-		else if (tipo.equals("register"))
-			paqueteUsuario(request, response);
-		else if (tipo.equals("boleta"))
-			boletaUsuairoRegister(request, response);
-		else if (tipo.equals("factura"))
-			facturaUsuairoRegister(request, response);
-		else if (tipo.equals("tipUpdateBol"))
-			updateTipBoleta(request, response);
-		else if (tipo.equals("tipUdateFac"))
-			updateTipFactura(request, response);
-                else if (tipo.equals("facturapdf"))
-                    facturaBotonPDF(request, response);
-                else if (tipo.equals("boletapdf"))
-                    boletaBotonPDF(request, response);
+            String tipo = request.getParameter("accion");
+
+            if(tipo.equals("lista"))
+                    listarUsuarios(request, response);
+            else if (tipo.equals("grabar"))
+                    registroGrabar(request,response);
+            else if (tipo.equals("eliminar"))
+                    eliminarUsuario(request, response);
+            else if (tipo.equals("login"))
+                    iniciarLogin(request, response);
+            else if (tipo.equals("cerrar"))
+                    cerrarLogin(request, response);
+            else if (tipo.equals("register"))
+                    paqueteUsuario(request, response);
+            else if (tipo.equals("boleta"))
+                    boletaUsuairoRegister(request, response);
+            else if (tipo.equals("factura"))
+                    facturaUsuairoRegister(request, response);
+            else if (tipo.equals("tipUpdateBol"))
+                    updateTipBoleta(request, response);
+            else if (tipo.equals("tipUdateFac"))
+                    updateTipFactura(request, response);
+            else if (tipo.equals("facturapdf"))
+                facturaBotonPDF(request, response);
+            else if (tipo.equals("boletapdf"))
+                boletaBotonPDF(request, response);
 		
 	}
 
@@ -448,9 +450,9 @@ public class ServletUsuario extends HttpServlet {
 	                System.out.println("No se pudo iniciar sesión con el usuario guardado.");
 	            } else {
 	            	//finalizar la sesion anterior
-	        		HttpSession session=request.getSession();
-	        		//invalidar todos los atributos de tipo sesión
-	        		session.invalidate();
+                        HttpSession session=request.getSession();
+                        //invalidar todos los atributos de tipo sesión
+                        session.invalidate();
 	        		
 	            	// Almacenar los datos del usuario en la sesión HTTP
 	                HttpSession session2 = request.getSession();

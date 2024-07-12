@@ -28,19 +28,20 @@ public class ServletCategoriaJSON extends HttpServlet {
     }
 
 
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//obtener lista de todos los administradores
+        //obtener lista de todos los administradores
         List<Categoria> lista = new MySqlCategoriaDAO().findAllCategoria();
-		//crear objeto de la clase Gson
-		Gson gson = new Gson();
-		//convertir a JSON(STRING) el arreglo lista
-		String json = gson.toJson(lista);
-		//preparar salida en formato JSON
-		response.setContentType("application/json;charset=UTF-8");
-		//
-		PrintWriter pw=response.getWriter();
-		pw.print(json); 
-	}
+        //crear objeto de la clase Gson
+        Gson gson = new Gson();
+        //convertir a JSON(STRING) el arreglo lista
+        String json = gson.toJson(lista);
+        //preparar salida en formato JSON
+        response.setContentType("application/json;charset=UTF-8");
+        //
+        PrintWriter pw=response.getWriter();
+        pw.print(json); 
+    }
 
 }

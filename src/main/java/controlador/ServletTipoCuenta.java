@@ -16,18 +16,20 @@ import entidad.TipoCuenta;
 @WebServlet("/ServletTipoCuenta")
 public class ServletTipoCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+        
        
 
-    public ServletTipoCuenta() {
-        super();
-    }
+        public ServletTipoCuenta() {
+            super();
+        }
 
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String tipo = request.getParameter("accion");
-		
-		if(tipo.equals("lista"))
-			listarTipoCuenta(request, response);
+            
+            String tipo = request.getParameter("accion");
+
+            if(tipo.equals("lista"))
+                    listarTipoCuenta(request, response);
 	}
 	
 	protected void listarTipoCuenta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

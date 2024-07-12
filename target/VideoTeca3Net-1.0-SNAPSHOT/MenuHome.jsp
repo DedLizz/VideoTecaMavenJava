@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
 body, html {
-background: red;
+background: #1c1c1c;
    height: 100%;
    margin: 0;
 }
 .header {
-    background-color: #333; /* Color de fondo del header */
+    background-color: #af190c; /* Color de fondo del header */
     color: #fff; /* Color del texto del header */
     padding: 10px 20px; /* Espaciado interno del header */
     position: fixed; /* Fijamos la posición del header */
@@ -76,15 +76,16 @@ background: red;
 text-align: center;
 color: #20ebd1;
 }
+/*estilo del grid de videos*/
 .main-content {
-    background: gray;
+    background: #1c1c1c;
     margin-top: 60px;
     margin-left: 20vw; /* Igual al ancho del sidebar */
     height: 100%; /* Ocupa todo el alto disponible */
     width: 80vw; /* Ancho restante después del sidebar */
-    overflow-y: auto; /* Agrega scroll si el contenido es más largo que la altura del contenido principal */
     padding: 5px 10px;
 }
+/*fin estilo grid de videos*/
 .categoria-btn {
     display: block;
     margin-bottom: 10px;
@@ -197,18 +198,26 @@ color: #20ebd1;
 
 
 #cerrar-sesion-btn {
-    background-color: white;
+    background-color: #1df700;
     color: black;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    font-weight: bold;
 }
-
-.video-container{
+/*contenedor de cada video*/
+.video-container {
     background: black;
     border-radius: 30px;
     padding-bottom: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.video-container:hover {
+    transform: scale(1.05); /* Aplica un pequeño zoom */
+    box-shadow: 0 0 50px rgba(255, 255, 255, 2); /* Ilumina el contorno */
+}
+/*fin de contenedor de video*/
 
 
 iframe{
@@ -326,8 +335,73 @@ margin-top: 70px;
     margin: 10px;
 color: wheat;
 }
+
+/*CHATBOT*/
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
         
-		
+        .chatbot-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chatbot-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-popup {
+            display: none;
+            position: fixed;
+            bottom: 120px; /* Adjusted for new icon size */
+            right: 20px;
+            width: 400px;
+            height: 600px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border:none;
+        }
+        
+        .chatbot-popup iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 5px;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 15px;
+            font-weight: bold;
+            z-index: 1001;
+        }
+        
+        @keyframes vibrate {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-2px); }
+            100% { transform: translateX(0); }
+        }	
     </style>
 </head>
 
@@ -368,17 +442,17 @@ color: wheat;
 		        <a href="#" onclick="buscarPalabraPag()"><i class="fas fa-search"></i></a>
 		    </div>
 			<h4>Favoritos</h4>
-            <div class="categoria-grid" id="lista-categorias"></div>
-            <div class="ayuda">
-            	<div class="redes">
-            	<!-- Icono de cerrar (X) -->
-					<a href="#" class="close">&times;</a>
-					
-					<!-- Icono de Facebook -->
-					<a href="https://www.facebook.com/tupagina" target="_blank"><i class="fab fa-facebook"></i></a>
-					
-					<!-- Icono de Instagram -->
-					<a href="https://www.instagram.com/tuinstagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <div class="categoria-grid" id="lista-categorias"></div>
+                        <div class="ayuda">
+                        <div class="redes">
+                        <!-- Icono de cerrar (X) -->
+                        <a href="registroVideo.jsp" class="close">&times;</a>
+
+                        <!-- Icono de Facebook -->
+                        <a href="https://www.facebook.com/tupagina" target="_blank"><i class="fab fa-facebook"></i></a>
+
+                        <!-- Icono de Instagram -->
+                        <a href="https://www.instagram.com/tuinstagram" target="_blank"><i class="fab fa-instagram"></i></a>
 					            	
             	</div>
             	 <!-- Botón para abrir el formulario modal -->
@@ -406,7 +480,39 @@ color: wheat;
         </form>
     </div>
 </div>
-    
+
+<!-- chat bot -->
+    <div class="chatbot-icon" id="chatbotIcon" onclick="toggleChatbot()">
+        <img src="imagenes/bot.png" alt="Chatbot Icon">
+    </div>
+
+    <div class="chatbot-popup" id="chatbotPopup">
+        <div class="close-btn" onclick="toggleChatbot()">×</div>
+        <iframe src="https://landbot.online/v3/H-2533554-AL69X0GS74IFEB7E/index.html"></iframe>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            var popup = document.getElementById('chatbotPopup');
+            if (popup.style.display === 'none' || popup.style.display === '') {
+                popup.style.display = 'block';
+            } else {
+                popup.style.display = 'none';
+            }
+        }
+
+        function vibrateIcon() {
+            var icon = document.getElementById('chatbotIcon');
+            icon.style.animation = 'vibrate 0.3s linear infinite';
+            setTimeout(function() {
+                icon.style.animation = '';
+            }, 300);
+        }
+
+        setInterval(vibrateIcon, 5000); // Vibrate every 5 seconds
+    </script>
+<!--  fin chat bot -->
+            
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

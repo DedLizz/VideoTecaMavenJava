@@ -10,15 +10,6 @@
         </session-timeout>
     </session-config>
     
-    <!--ESTO ES UN CONFIGURACIÓN Y DEPENDENCIA SE PUEDE ELIMINAR JSTL -->
-    <jsp-config>
-        <taglib>
-            <taglib-uri>https://jakarta.ee/xml/ns/jstl</taglib-uri>
-            <taglib-location>/WEB-INF/tld/c.tld</taglib-location>
-        </taglib>
-    </jsp-config>
-    <!-- FIN JSTL -->
-    
-    
-    
+
+
 </web-app>

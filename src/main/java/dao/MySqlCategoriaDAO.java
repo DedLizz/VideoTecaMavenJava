@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entidad.Categoria;
+import entidad.CategoriaInfo;
 import interfaces.categoriaDAO;
 import utils.MySqlConectar;
 
 public class MySqlCategoriaDAO implements categoriaDAO {
 
-	@Override
+    //agrega categoria save
+    @Override
     public int save(Categoria bean) {
         int salida = -1;
         Connection cn = null;
@@ -39,7 +41,7 @@ public class MySqlCategoriaDAO implements categoriaDAO {
         return salida;
     }
 	
-	
+    //actualiza la categorias
     @Override
     public int update(Categoria bean) {
         int salida = -1;
@@ -67,6 +69,7 @@ public class MySqlCategoriaDAO implements categoriaDAO {
         return salida;
     }
 
+    //borra la categoria por id
     @Override
     public int deleteById(int id) {
         int salida = -1;
@@ -93,6 +96,7 @@ public class MySqlCategoriaDAO implements categoriaDAO {
         return salida;
     }
 
+    //busca las categorias por id
     @Override
     public Categoria findById(int id) {
         Categoria categoria = null;
@@ -127,7 +131,7 @@ public class MySqlCategoriaDAO implements categoriaDAO {
         return categoria;
     }
 	
-	
+    //esta lista todos las categorias
     @Override
     public List<Categoria> findAllCategoria() {
     List<Categoria> lista = new ArrayList<>();
@@ -161,7 +165,56 @@ public class MySqlCategoriaDAO implements categoriaDAO {
         }
         return lista;
     }
-	
+    
+    //este lista categorias con catidad de videos de cada una
+    @Override
+    public List<CategoriaInfo> findAllCategoriaInfo() {
+        List<CategoriaInfo> lista = new ArrayList<>();
+        Connection cn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+
+        try {
+            cn = new MySqlConectar().getConnection();
+            String sql = "SELECT " +
+                         "    c.idCategoria, " +
+                         "    c.nombreCate AS nombreCategoria, " +
+                         "    COUNT(v.idVideo) AS cantidadVideos " +
+                         "FROM " +
+                         "    categoria c " +
+                         "LEFT JOIN " +
+                         "    video v ON c.idCategoria = v.idCategoria " +
+                         "GROUP BY " +
+                         "    c.idCategoria, c.nombreCate";
+            pstm = cn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                CategoriaInfo categoriaInfo = new CategoriaInfo();
+                categoriaInfo.setIdCategoria(rs.getInt("idCategoria"));
+                categoriaInfo.setNombreCategoria(rs.getString("nombreCategoria"));
+                categoriaInfo.setCantidadVideo(rs.getInt("cantidadVideos"));
+                lista.add(categoriaInfo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (pstm != null)
+                    pstm.close();
+                if (cn != null)
+                    cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
+    }
+
+
+    //verifica si existe la categoria
     @Override
     public boolean categoriaExistente(String nombreCategoria) {
         PreparedStatement pstm = null;

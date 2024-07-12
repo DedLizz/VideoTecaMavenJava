@@ -1,5 +1,6 @@
 package controlador;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import dao.MySqlVideoDAO;
 import entidad.Video;
+import entidad.VideoInfo;
 import jakarta.servlet.http.HttpSession;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 @WebServlet("/ServletVideo")
@@ -21,23 +28,30 @@ public class ServletVideo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
  
-    public ServletVideo() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+        public ServletVideo() {
+            super();
+            // TODO Auto-generated constructor stub
+        }
 
 	
+        @Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String tipo = request.getParameter("accion");
-		
-		if(tipo.equals("lista"))
-			listarVideo(request, response);
-		else if (tipo.equals("buscar"))
-			buscarVideo(request,response);
-		else if (tipo.equals("buscarVi"))
-			buscarVideoTitulo(request,response);
-		else if (tipo.equals("eliminar"))
-			eliminarVideo(request, response);
+            String tipo = request.getParameter("accion");
+
+            if(tipo.equals("lista"))
+                listarVideo(request, response);
+            else if (tipo.equals("buscar"))
+                buscarVideo(request,response);
+            else if (tipo.equals("buscarVi"))
+                buscarVideoTitulo(request,response);
+            else if (tipo.equals("guardar"))
+                guardarVideo(request, response);
+            else if (tipo.equals("editar"))
+                editarVideo(request, response);
+            else if (tipo.equals("eliminar"))
+                eliminarVideo(request, response);
+            else if (tipo.equals("exel"))
+                exelVideo(request, response);
 		
 	}
 	
@@ -71,30 +85,21 @@ public class ServletVideo extends HttpServlet {
 	    }
 	}
 
+         //LISTA VIDEOS PARA EL ADMINISTRADOR
 	protected void listarVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-        List<Video> lista = null;
-        try {
+            List<Video> lista = new MySqlVideoDAO().findAllVideo();
             
-            lista = new MySqlVideoDAO().findAllVideo();
-            System.out.println("Datos de usuarios obtenidos correctamente de la base de datos:");
-            if (lista != null) {
-                for (Video video : lista) {
-                    System.out.println("ID video: " + video.getIdVideo());
-                    System.out.println("titulo: " + video.getTituloVideo());
-                    System.out.println("URL: " + video.getUrlVideo());
-                    System.out.println("Descripción: " + video.getDescripcion());
-                    System.out.println("Tipo de categoria: " + video.getCategoriaVideo());
-                    System.out.println("---------------------------");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error al obtener los datos de usuarios de la base de datos: " + e.getMessage());
-        }
-        request.setAttribute("listaVideos", lista);
-        request.getRequestDispatcher("/videos.jsp").forward(request, response);
-	
+            //crear objeto de la clase Gson
+            Gson gson = new Gson();
+            //convertir a JSON(STRING) el arreglo lista
+            String json = gson.toJson(lista);
+            //preparar salida en formato JSON
+            response.setContentType("application/json;charset=UTF-8");
+            //
+            PrintWriter pw=response.getWriter();
+            pw.print(json); 
+
 	}
 	
 
@@ -145,22 +150,122 @@ public class ServletVideo extends HttpServlet {
 		
 	}
 	
-	protected void eliminarVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void guardarVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String tituloVideo = request.getParameter("tituloPag");
+            String descricionVideo = request.getParameter("descripPag");
+            String url = request.getParameter("urlPag");
+            int idCategoria = Integer.parseInt(request.getParameter("idCategoriaPag"));
+            
+            Video bean = new Video();
+            bean.setTituloVideo(tituloVideo);
+            bean.setDescripcion(descricionVideo);
+            bean.setUrlVideo(url);
+            bean.setCategoriaVideo(idCategoria);
+            
+            int estado = new MySqlVideoDAO().save(bean);
+            
+            
+            if( estado == 1 ){
+                System.out.println("VIDEO GUARDADO EXITOSAMENTE");
+                response.sendRedirect("registroVideo.jsp");
+            } else {
+                System.out.println("NO SE GUARDO EL VIDEO");
+                response.sendRedirect("registroVideo.jsp");
+            }	
 	}
-	
-   
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+        
+        protected void editarVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            int idVideo = Integer.parseInt(request.getParameter("idVideoPag"));
+            String tituloVideo = request.getParameter("tituloPag");
+            String descricionVideo = request.getParameter("descripPag");
+            String url = request.getParameter("urlPag");
+            int idCategoria = Integer.parseInt(request.getParameter("idCategoriaPag"));
+            
+            Video bean = new Video();
+            bean.setIdVideo(idVideo);
+            bean.setTituloVideo(tituloVideo);
+            bean.setDescripcion(descricionVideo);
+            bean.setUrlVideo(url);
+            bean.setCategoriaVideo(idCategoria);
+            
+            int estado = new MySqlVideoDAO().update(bean);
+            
+            if( estado == 1 ){
+                System.out.println("VIDEO GUARDADO EXITOSAMENTE");
+            } else {
+                System.out.println("NO SE GUARDO EL VIDEO");
+            }	
+            
+            response.sendRedirect("registroVideo.jsp");
+            
+        }
+        
+        protected void eliminarVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            int idVideo = Integer.parseInt(request.getParameter("idVideoPag"));
+            
+            
+            int estado = new MySqlVideoDAO().deleteById(idVideo);
+            
+            if (estado == 1){
+                System.out.println("VIDEO ELIMINADO CONRRECTAMENTE");
+            } else {
+                System.out.println("EL VIDEO NO SE ELIMINO");
+            }
+            
+            response.sendRedirect("registroVideo.jsp");
+            
+        }
+        
+        protected void exelVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         
+        // Obtener la lista de videos
+        List<VideoInfo> lista = new MySqlVideoDAO().findAllVideosWithCategory();
+        
+        
+        // Crear un nuevo libro de trabajo
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        
+        // Crear una hoja en el libro de trabajo
+        XSSFSheet sheet = workbook.createSheet("Videos");
+        
+        // Crear la fila de encabezado
+        XSSFRow headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Titulo Video");
+        headerRow.createCell(2).setCellValue("Descripción");
+        headerRow.createCell(3).setCellValue("URL");
+        headerRow.createCell(4).setCellValue("Categoria");
+        
+        // Llenar el resto de filas con los datos de las categorias
+        int rowNum = 1;
+        for (VideoInfo video : lista) {
+            XSSFRow row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(video.getIdVideo());
+            row.createCell(1).setCellValue(video.getTituloVideo());
+            row.createCell(2).setCellValue(video.getDescripcion());
+            row.createCell(3).setCellValue(video.getUrlVideo());
+            row.createCell(4).setCellValue(video.getNombreCategoria());
+        }
+        
+        // Escribir el libro de trabajo en un flujo de salida
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=Lista-Videos.xlsx");
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar el libro de trabajo
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }  
+    }
+        
+
+        
 	
 	
 	

@@ -14,12 +14,13 @@ import entidad.ReportComentario;
 @WebServlet("/ServletReportComent")
 public class ServletReportComent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+        
        
-
-    public ServletReportComent() {
-        super();
-    }
+        public ServletReportComent() {
+            super();
+        }
     
+        @Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String tipo = request.getParameter("accion");

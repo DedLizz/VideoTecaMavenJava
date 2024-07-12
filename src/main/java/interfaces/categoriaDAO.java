@@ -3,6 +3,7 @@ package interfaces;
 import java.util.List;
 
 import entidad.Categoria;
+import entidad.CategoriaInfo;
 
 public interface categoriaDAO {
 	
@@ -12,4 +13,5 @@ public interface categoriaDAO {
         Categoria findById(int id);
 	List<Categoria> findAllCategoria();
 	boolean categoriaExistente(String nombreCategoria);
+        List<CategoriaInfo> findAllCategoriaInfo();
 }

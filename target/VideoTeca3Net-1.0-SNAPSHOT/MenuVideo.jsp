@@ -5,8 +5,126 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="Estilos/MenuVideo.css" rel="stylesheet" type="text/css" media="all">
 
+<style>
+    body{
+	background:black;
+}
+/*cabecera*/
+.header {
+    background-color: #af190c;
+    color: #fff;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: system-ui;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: transform 0.3s, color 0.3s; 
+}
+
+.logo a:hover {
+  transform: scale(1.1); 
+  color: #0ab500; 
+}
+
+.user-info a{
+text-decoration: none;
+color: white;
+font-weight: bold;
+}
+
+.user-btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+}
+.tooltip {
+    margin-right: 3%;
+    display: flex;
+}
+.user-btn:hover + .tooltiptext, .tooltiptext:hover {
+    display: block;
+}
+.tooltiptext {
+    display: none;
+    position: absolute;
+    bottom: -28px;
+    left: 95%;
+    transform: translateX(-50%);
+}
+#cerrar-sesion-btn {
+    background-color: #1df700;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/*cuerpo*/
+
+
+
+
+.sidebar {
+ position: fixed;
+ top: 47px;
+ right: 0;
+ width: 27vw;
+}
+
+
+.btnPaqueteHeader a{
+margin-left: 70px;
+color: #14f314;
+}
+
+
+    /* Estilo para el contenedor de favoritos */
+    .favoritos {
+        display: flex;
+        flex-direction: column;
+        height: 88vh;
+        overflow-y: auto;
+        background: #1c1c1c;
+        padding: 10px;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        margin-top: 20px;
+        margin-right: 5px;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    .contenedor-video {
+        background: white;
+        position: relative;
+        margin-left: 6vw;
+        margin-top: 90px;
+    }
+</style>
 </head>
 <body>
 
@@ -42,9 +160,11 @@
     <div class="content">
     
     	<div class="contenedor-video">
-	    	<div class="video">
-	    		<jsp:include page="video.jsp" />
-	    	</div>
+          
+                <div class="video">
+                    <jsp:include page="video.jsp" />
+                </div>
+            
         </div>
     
         <div class="sidebar">
@@ -58,7 +178,7 @@
 
     
     
-    <script type="text/javascript">
+<script type="text/javascript">
     //fuciones para btn de cerrar cesion
     // Función para mostrar el botón de cerrar sesión en el tooltip
     function mostrarCerrarSesion() {
@@ -98,6 +218,6 @@
     };
 
     
-    </script>
+</script>
 </body>
 </html>

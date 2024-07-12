@@ -10,12 +10,20 @@
 <style type="text/css">
 
 
+/*contenedor de cada video*/
 .video-conta {
     background: black;
     text-align: center;
     border-radius: 30px;
     margin-top: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
+.video-conta:hover {
+    transform: scale(1.05); /* Aplica un pequeño zoom */
+    box-shadow: 0 0 50px rgba(255, 255, 255, 2); /* Ilumina el contorno */
+}
+/*fin de contenedor de video*/
+
 
 .video-conta p{
 display: none;

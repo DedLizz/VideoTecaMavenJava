@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entidad.Video;
+import entidad.VideoInfo;
 import interfaces.videoDAO;
 import utils.MySqlConectar;
 
@@ -44,7 +45,7 @@ public class MySqlVideoDAO implements videoDAO {
 
 
 	@Override
-	public int update(Video bean) { // Cambié el parámetro de Usuario a Video
+	public int update(Video bean) {
 	    int salida = -1;
 	    Connection cn = null;
 	    PreparedStatement pstm = null;
@@ -186,7 +187,7 @@ public class MySqlVideoDAO implements videoDAO {
 	    return videos;
 	}
 
-
+        //esto lista los videos sin mezclas
 	@Override
 	public List<Video> findAllVideo() {
 	    List<Video> lista = new ArrayList<>();
@@ -221,8 +222,47 @@ public class MySqlVideoDAO implements videoDAO {
 	    }
 	    return lista;
 	}
+        
+        //este metodo mezcla dos tabla para extraer los datos de videos completos nombres
+        @Override
+        public List<VideoInfo> findAllVideosWithCategory() {
+            List<VideoInfo> lista = new ArrayList<>();
+            Connection cn = null;
+            PreparedStatement pstm = null;
+            ResultSet rs = null;
+            try {
+                cn = new MySqlConectar().getConnection();
+                String sql = "SELECT v.idVideo, v.tituloVideo, v.descriVideo, v.enlaceURL, c.nombreCate " +
+                             "FROM video v " +
+                             "JOIN categoria c ON v.idCategoria = c.idCategoria";
+                pstm = cn.prepareStatement(sql);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    VideoInfo video = new VideoInfo();
+                    video.setIdVideo(rs.getInt("idVideo"));
+                    video.setTituloVideo(rs.getString("tituloVideo"));
+                    video.setDescripcion(rs.getString("descriVideo"));
+                    video.setUrlVideo(rs.getString("enlaceURL"));
+                    video.setNombreCategoria(rs.getString("nombreCate"));
+                    lista.add(video);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (pstm != null)
+                        pstm.close();
+                    if (cn != null)
+                        cn.close();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+            return lista;
+        }
 
-	
+
+	//verifica si el video existe
 	@Override
 	public boolean videoExistente(int idVideo) { 
 	    PreparedStatement pstm = null;

@@ -62,7 +62,7 @@
                 // Recorrer la respuesta
                 $.each(response, function(index, video){
                     // Crear un elemento de lista por cada video
-                    var iframeCode = '<div class="video-container"><iframe width="100%" height="315" src="' + video.urlVideo + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+                    var iframeCode = '<div class="video-container"><iframe width="100%" height="315" loading="lazy" src="' + video.urlVideo + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
                     iframeCode += '<div class="video-info"><a href="ServletVideo?accion=buscar&idVideoPag=' + video.idVideo + '">' + video.tituloVideo + '</a>';
                     iframeCode += '<p><strong>Categoría:</strong> ' + video.categoriaVideo + '</p>';
                     iframeCode += '</div></div>';

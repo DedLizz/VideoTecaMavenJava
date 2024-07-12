@@ -33,12 +33,14 @@ import java.util.logging.Logger;
  */
 @WebServlet("/ServletRecuperarCuenta")
 public class ServletRecuperarCuenta extends HttpServlet {
+    
 
-       public ServletRecuperarCuenta() {
+    public ServletRecuperarCuenta() {
         super();
     }
 
 
+    @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tipo = request.getParameter("accion");
 		

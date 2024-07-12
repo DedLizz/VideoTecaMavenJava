@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="CategoriaReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <!-- Parámetros -->
+    <parameter name="tituloGrafico" class="java.lang.String" isForPrompting="false"/>
+
+    <!-- Datos -->
+    <field name="nombreCategoria" class="java.lang.String"/>
+    <field name="cantidadVideo" class="java.lang.Integer"/>
+
+    <title>
+        <band height="200">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="20"/>
+                </textElement>
+                <text><![CDATA[Reporte de Cantidad de Videos por Categoría]]></text>
+            </staticText>
+
+            <!-- Gráfico de Barras -->
+            <barChart>
+                <chart evaluationTime="Report">
+                    <reportElement x="0" y="30" width="555" height="150"/>
+                    <chartTitle/>
+                    <chartSubtitle/>
+                    <chartLegend/>
+                </chart>
+                <categoryDataset>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Cantidad de Videos"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{nombreCategoria}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{cantidadVideo}]]></valueExpression>
+                    </categorySeries>
+                </categoryDataset>
+                <barPlot>
+                    <plot/>
+                    <itemLabel/>
+                </barPlot>
+            </barChart>
+        </band>
+    </title>
+</jasperReport>
+
