@@ -68,18 +68,18 @@
 		    <p class="info-container">Nombre: <h4>${sessionScope.nombre}</h4></p>
 		    <p class="info-container">Apellido: <h4>${sessionScope.apellido}</h4></p>
 		    <p class="info-container">Email: <h4>${sessionScope.email}</h4></p>
-		    <p class="info-container">Tipo Cuenta: 
-			    <h4>
-			        <c:choose>
-			            <c:when test="${sessionScope.idTipoCuenta == 1}">
-			                FREE
-			            </c:when>
-			            <c:otherwise>
-			                Premium
-			            </c:otherwise>
-			        </c:choose>
-			    </h4>
-		    </p>
+		    <p class="info-container">Tipo Cuenta: <h4 id="cuentaID"></h4> </p>
+                    <input type="hidden" value="${sessionScope.idTipoCuenta}">
+                    <script>
+                        var tipoCuenta = "<%= session.getAttribute("idTipoCuenta") %>";
+                        console.log("${sessionScope.idTipoCuenta}")
+                        if(tipoCuenta === "1"){
+                            console.log("ENTRO EN LA FUNCION")
+                            document.getElementById("cuentaID").innerHTML = "FREE";
+                        } else if(tipoCuenta === "2"){
+                            document.getElementById("cuentaID").innerHTML = "Premium";
+                        }
+                    </script>
         </div>
         <div class="conten-boleta" id="plan-info-container" style="display: none;">
         	<h2>Informacion Plan</h2>

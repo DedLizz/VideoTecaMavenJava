@@ -60,7 +60,7 @@ public class ServletRecuperarCuenta extends HttpServlet {
     private void enviarCorreo(String destinatario) throws MessagingException {
         // Datos de autenticación
         final String username = "dedlizi611@gmail.com";
-        final String password = "qtud dyjl tmgl gfvl";
+        final String password = "yjlr daom sklb rrxf";
 
         // Configuración de propiedades
         Properties props = new Properties();
