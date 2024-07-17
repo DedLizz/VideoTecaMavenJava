@@ -44,7 +44,7 @@ public class ServletRecuperarCuenta extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tipo = request.getParameter("accion");
 		
-	if(tipo.equals("recuperar"))
+	    if(tipo.equals("recuperar"))
             try {
                 recuperarCuenta(request, response);
         } catch (MessagingException ex) {
@@ -60,7 +60,7 @@ public class ServletRecuperarCuenta extends HttpServlet {
     private void enviarCorreo(String destinatario) throws MessagingException {
         // Datos de autenticación
         final String username = "dedlizi611@gmail.com";
-        final String password = "qtud dyjl tmgl gfvl";
+        final String password = "xcqv udtj hqsu bbrg";
 
         // Configuración de propiedades
         Properties props = new Properties();
@@ -104,7 +104,7 @@ public class ServletRecuperarCuenta extends HttpServlet {
 
         if (usu == null) {
             // Atributo de tipo sesión
-            request.getSession().setAttribute("MENSAJE", "Usuario y/o clave incorrectos");
+            //request.getSession().setAttribute("MENSAJE", "Usuario y/o clave incorrectos");
             response.sendRedirect("recuperarone.jsp");
         } else {
             // Se obtienen los datos del usuario que inició sesión

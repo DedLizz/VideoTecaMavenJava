@@ -12,6 +12,21 @@
     .forgot {
     margin-left: 50px;
     }
+
+
+     .message-box {
+         position: fixed;
+         top: 10px;
+         right: 10px;
+         background-color: red;
+         color: white;
+         padding: 10px;
+         border-radius: 5px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+         z-index: 1000;
+         font-weight: bold;
+     }
+
   </style>
 </head>
 <body>
@@ -38,9 +53,18 @@
             <input type="password" id="ContraPagLog" name="ContraPagLog" placeholder="Password" required>
             <button type="submit">Login</button>
             <p class="forgot">¿Olvidaste tu cuenta? <a href="recuperarone.jsp">Haz clic aquí</a></p>
+            <p class="forgot">¿Se parte de nuestro equipo? <a href="formSolicitud.jsp">Presentar Solicitud</a></p>
         </form>
     </div>
 </div>
+
+
+
+<!-- Usando EL -->
+<div class="message-box">
+    ${sessionScope.MENSAJE}
+</div>
+
 
 <script>
 function validateRegisterForm() {

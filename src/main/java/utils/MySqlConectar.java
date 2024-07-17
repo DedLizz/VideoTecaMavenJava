@@ -10,9 +10,9 @@ public class MySqlConectar {
            String url, user, pass;
            // Driver
            Class.forName("com.mysql.cj.jdbc.Driver");
-           url = "jdbc:mysql://localhost:3307/videoteca?serverTimezone=UTC";
+           url = "jdbc:mysql://localhost:3306/videoteca?serverTimezone=UTC";
            user = "root";
-           pass = "";
+           pass = "199411";
            cn = DriverManager.getConnection(url, user, pass);
        } catch (Exception e) {
            e.printStackTrace();

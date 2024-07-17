@@ -84,7 +84,7 @@ color: #20ebd1;
     height: 100%; /* Ocupa todo el alto disponible */
     width: 80vw; /* Ancho restante después del sidebar */
     padding: 5px 10px;
-}
+} 
 /*fin estilo grid de videos*/
 .categoria-btn {
     display: block;
@@ -446,7 +446,7 @@ color: wheat;
                         <div class="ayuda">
                         <div class="redes">
                         <!-- Icono de cerrar (X) -->
-                        <a href="registroVideo.jsp" class="close">&times;</a>
+                        <a href="https://x.com/" class="close">&times;</a>
 
                         <!-- Icono de Facebook -->
                         <a href="https://www.facebook.com/tupagina" target="_blank"><i class="fab fa-facebook"></i></a>

@@ -2,6 +2,7 @@ package controlador;
 
 import java.io.IOException;
 
+import entidad.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,11 +15,6 @@ import dao.MySqlBoletaEntregaDAO;
 import dao.MySqlFacturaDAO;
 import dao.MySqlFacturaEntregaDAO;
 import dao.MySqlUsuarioDAO;
-import entidad.Boleta;
-import entidad.BoletaEntregaUser;
-import entidad.Factura;
-import entidad.FacturaEntregaUser;
-import entidad.Usuario;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -36,6 +32,10 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
+//imports otros paquetes
+import entidad.Admin;
+import dao.MySqlAdminDAO;
 
 
 
@@ -129,39 +129,64 @@ public class ServletUsuario extends HttpServlet {
 	
 	
 	
-	private void iniciarLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void iniciarLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String EmailLog, ContraLog;
 		EmailLog = request.getParameter("EmailPagLog");
 		ContraLog = request.getParameter("ContraPagLog");
-		
-		//valida si el usuario y la clave coninciden
-		Usuario usu = new MySqlUsuarioDAO().iniciarSesion(EmailLog, ContraLog);
-		
-		if (usu == null) {
-			//atributo de tipo sesion
-			request.getSession().setAttribute("MENSAJE", "Usuario y/o clave incorrectos");
-			response.sendRedirect("loginRegister.jsp");
+		boolean emailBolean = EmailLog.contains("@admin.com");
+
+		if (emailBolean) {
+			Admin adm = new MySqlAdminDAO().iniciarSesion(EmailLog, ContraLog);
+			if (adm == null) {
+				request.getSession().setAttribute("MENSAJE", "Contrasena o correo incorrectos");
+				request.getRequestDispatcher("/loginRegister.jsp").forward(request, response);
+			} else {
+				HttpSession session = request.getSession();
+				session.setAttribute("idAdm", adm.getIdAdmin());
+				session.setAttribute("nombreAdm", adm.getNombre());
+				session.setAttribute("apellidoAdm", adm.getApellido());
+				session.setAttribute("emailAdm", adm.getCorreo());
+				session.setAttribute("contraAdm", adm.getContrasena());
+				session.setAttribute("telefonoAdm", adm.getTelefono());
+				session.setAttribute("dniAdm", adm.getDni());
+				response.sendRedirect("registroVideo.jsp");
+			}
 		} else {
-			// Se obtienen los datos del usuario que inició sesión
-			int idUsuario = usu.getIdUsuario();
-            String nombre = usu.getNombreUsuario();
-            String apellido = usu.getApellidoUsuario();
-            String email = usu.getEmailUsuaio();
-            int idTipoCuenta = usu.getTipoCuentaUsuario();
+			//valida si el usuario y la clave coninciden
+			Usuario usu = new MySqlUsuarioDAO().iniciarSesion(EmailLog, ContraLog);
 
-            // Se almacenan los datos del usuario en la sesión HTTP
-            HttpSession session = request.getSession();
-            session.setAttribute("id", idUsuario);
-            session.setAttribute("nombre", nombre);
-            session.setAttribute("apellido", apellido);
-            session.setAttribute("email", email);
-            session.setAttribute("idTipoCuenta", idTipoCuenta);
-            
+			if (usu == null) {
+				//atributo de tipo sesion
+				request.getSession().setAttribute("MENSAJE", "Usuario y/o clave incorrectos");
+				if (usu == null) {
+					request.getSession().setAttribute("MENSAJE", "Contrasena o correo incorrectos");
+					request.getRequestDispatcher("/loginRegister.jsp").forward(request, response);
+				}
+			} else {
+				// Se obtienen los datos del usuario que inició sesión
+				int idUsuario = usu.getIdUsuario();
+				String nombre = usu.getNombreUsuario();
+				String apellido = usu.getApellidoUsuario();
+				String email = usu.getEmailUsuaio();
+				int idTipoCuenta = usu.getTipoCuentaUsuario();
+
+				// Se almacenan los datos del usuario en la sesión HTTP
+				HttpSession session = request.getSession();
+				session.setAttribute("id", idUsuario);
+				session.setAttribute("nombre", nombre);
+				session.setAttribute("apellido", apellido);
+				session.setAttribute("email", email);
+				session.setAttribute("idTipoCuenta", idTipoCuenta);
 
 
-            // Redireccionar a la página de inicio o a alguna otra página de tu aplicación
-            response.sendRedirect("MenuHome.jsp");
+
+				// Redireccionar a la página de inicio o a alguna otra página de tu aplicación
+				response.sendRedirect("MenuHome.jsp");
+			}
+
 		}
+		
+
 	}
 		
 		
